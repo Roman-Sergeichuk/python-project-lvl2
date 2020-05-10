@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "gendiff_by_Roman-Sergeichuk"
+version = "0.2.0"
+description = "The utility for searching differences in configuration files."
+authors = ["Sergeichuk Roman <sergeichuk.roman@mail.ru>"]
+
+packages = [
+{ include = "gendiff" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.7.9"
+
+[tool.poetry.scripts]
+gendiff = "gendiff.scripts.run:main"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
