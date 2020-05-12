@@ -9,4 +9,13 @@ publish:
 	poetry config repositories.testpypi https://test.pypi.org/legacy/
 	poetry publish -r testpypi
 
-.PHONY: install lint publish
+selfcheck:
+	poetry check
+
+test:
+	poetry run pytest gendiff tests
+
+check: selfcheck test lint
+	
+
+.PHONY: check install lint publish test selfcheck
