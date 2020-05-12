@@ -13,7 +13,7 @@ selfcheck:
 	poetry check
 
 test:
-	poetry run pytest gendiff tests
+	poetry run pytest --cov=gendiff --cov-report xml tests/
 
 check: selfcheck test lint
 	
