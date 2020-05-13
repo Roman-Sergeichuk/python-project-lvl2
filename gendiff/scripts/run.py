@@ -1,16 +1,12 @@
 #!usr/bin/env python3
-import argparse
+from gendiff.cli import get_parse_args, get_formatted_string
 from gendiff.gendiff import generate_diff
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate diff')
-    parser.add_argument('first_file')
-    parser.add_argument('second_file')
-    parser.add_argument('-f', '--format', help='set format of output')
-    args = parser.parse_args()
+    args = get_parse_args()
     diff = generate_diff(args.first_file, args.second_file)
-    print(diff)
+    get_formatted_string(diff)
 
 
 if __name__ == '__main__':
