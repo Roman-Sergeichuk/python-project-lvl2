@@ -10,6 +10,3 @@ def get_parse_args():
     args = parser.parse_args()
     return args
 
-
-def get_formatted_string(data):
-    print(json.dumps(data, indent=2, separators=('', ': ')).replace('"', ''))  # noqa: E501

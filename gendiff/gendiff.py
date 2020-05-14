@@ -1,4 +1,5 @@
 from gendiff.encoder import get_data
+import json
 
 
 def generate_diff(first_file, second_file):
@@ -16,4 +17,5 @@ def generate_diff(first_file, second_file):
     for key, value in first_file_data.items():
         if key not in second_file_data:
             diff_data[f'- {key}'] = value
-    return diff_data
+    diff_string = json.dumps(diff_data, indent=2, separators=('', ': ')).replace('"', '')  # noqa: E501
+    return diff_string
