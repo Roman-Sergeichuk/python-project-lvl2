@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gendiff_by_Roman-Sergeichuk"
-version = "0.2.0"
+version = "0.3.0"
 description = "The utility for searching differences in configuration files."
 authors = ["Sergeichuk Roman <sergeichuk.roman@mail.ru>"]
 
