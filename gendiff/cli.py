@@ -1,5 +1,4 @@
 import argparse
-import json
 
 
 def get_parse_args():
@@ -9,4 +8,3 @@ def get_parse_args():
     parser.add_argument('-f', '--format', help='set format of output')
     args = parser.parse_args()
     return args
-
