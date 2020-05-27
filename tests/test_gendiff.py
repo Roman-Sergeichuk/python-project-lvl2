@@ -68,3 +68,19 @@ def test_plain_format():
         './tests/fixtures/after_nested.yml',
         out_format='plain'
     )
+
+
+def test_json_format():
+    with open('./tests/fixtures/json_expected_common_diff.txt', 'r') as fixture:
+        expected = fixture.read()
+
+    assert expected == generate_diff(
+        './tests/fixtures/before_nested.json',
+        './tests/fixtures/after_nested.json',
+        out_format='json'
+    )
+    assert expected == generate_diff(
+        './tests/fixtures/before_nested.yml',
+        './tests/fixtures/after_nested.yml',
+        out_format='json'
+    )

@@ -1,5 +1,6 @@
 from gendiff.format.default import generate_nested_format
 from gendiff.format.plain import generate_plain_format
+from gendiff.format.json import generate_json_format
 
 
 def make_formatted_string(common_data, tags, *, format):
@@ -7,4 +8,6 @@ def make_formatted_string(common_data, tags, *, format):
         out_string = generate_nested_format(common_data, tags)
     if format == 'plain':
         out_string = generate_plain_format(common_data, tags)
+    if format == 'json':
+        out_string = generate_json_format(common_data, tags)
     return out_string
