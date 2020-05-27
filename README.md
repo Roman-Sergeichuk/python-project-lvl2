@@ -8,3 +8,5 @@
 [![asciicast](https://asciinema.org/a/lnx778SwegompC8b2BglCv6Bg.svg)](https://asciinema.org/a/lnx778SwegompC8b2BglCv6Bg)
 ### Installation and launch of ver. 0.6.0
 [![asciicast](https://asciinema.org/a/aXZUSMTO3EkV0ZCoP4ZF0MPro.svg)](https://asciinema.org/a/aXZUSMTO3EkV0ZCoP4ZF0MPro)
+### Installation and launch of ver. 0.7.0
+[![asciicast](https://asciinema.org/a/re3mYpXMpAhUd3XBDLErwcr45.svg)](https://asciinema.org/a/re3mYpXMpAhUd3XBDLErwcr45)
