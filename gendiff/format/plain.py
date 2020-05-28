@@ -33,20 +33,14 @@ def generate_plain_format(common_data, tags):
                 out_string = out_string + make_line_added(property_path, key, value)  # noqa: E501
             if tag == 'deleted':
                 out_string = out_string + make_line_deleted(property_path, key)
-            if tag == 'modified_deleted':
-                changed_values['deleted'] = value
-                if 'deleted' in changed_values and 'added' in changed_values:
+            if tag == 'modified_deleted' or tag == 'modified_added':
+                changed_values[tag] = value
+                print(changed_values)
+                if 'modified_deleted' in changed_values and 'modified_added' in changed_values:  # noqa: E501
                     key = remove_postfix(key, postfix='_deleted')
-                    old_value = changed_values['deleted']
-                    new_value = changed_values['added']
-                    out_string = out_string + make_line_modified(property_path, key, old_value, new_value)  # noqa: E501
-                    changed_values = {}
-            if tag == 'modified_added':
-                changed_values['added'] = value
-                if 'deleted' in changed_values and 'added' in changed_values:
                     key = remove_postfix(key, postfix='_added')
-                    old_value = changed_values['deleted']
-                    new_value = changed_values['added']
+                    old_value = changed_values['modified_deleted']
+                    new_value = changed_values['modified_added']
                     out_string = out_string + make_line_modified(property_path, key, old_value, new_value)  # noqa: E501
                     changed_values = {}
         return out_string

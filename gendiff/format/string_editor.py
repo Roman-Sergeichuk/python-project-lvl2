@@ -15,9 +15,8 @@ def add_prefix(data_string, tags):
     for key, tag in tags.items():
         if type(tag) == dict:
             out_string = add_prefix(out_string, tag)
-        else:
-            if 'deleted' in tag:
-                out_string = make_key_prefix(out_string, key, prefix='- ')
-            elif 'added' in tag:
-                out_string = make_key_prefix(out_string, key, prefix='+ ')
+        elif 'deleted' in tag:
+            out_string = make_key_prefix(out_string, key, prefix='- ')
+        elif 'added' in tag:
+            out_string = make_key_prefix(out_string, key, prefix='+ ')
     return out_string

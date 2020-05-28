@@ -2,7 +2,7 @@ from gendiff.gendiff import generate_diff
 
 
 def test_compare_non_empty_flat_files():
-    with open('./tests/fixtures/expected_flat_common_diff.txt', 'r') as fixture:
+    with open('./tests/fixtures/flat_expected_common_diff.txt', 'r') as fixture:
         expected = fixture.read()
     assert expected == generate_diff(
         './tests/fixtures/before.json',
@@ -40,7 +40,7 @@ def test_compare_empty_files():
 
 
 def test_complex_files():
-    with open('./tests/fixtures/expected_nested_common_diff.txt', 'r') as fixture:
+    with open('./tests/fixtures/nested_expected_common_diff.txt', 'r') as fixture:
         expected = fixture.read()
     assert expected == generate_diff(
         './tests/fixtures/before_nested.json',
