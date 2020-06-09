@@ -1,86 +1,91 @@
-from gendiff.gendiff import generate_diff
+from gendiff.diff import generate_diff
+import os
+import json
 
 
-def test_compare_non_empty_flat_files():
-    with open('./tests/fixtures/flat_expected_common_diff.txt', 'r') as fixture:
-        expected = fixture.read()
-    assert expected == generate_diff(
-        './tests/fixtures/before.json',
-        './tests/fixtures/after.json',
-        out_format='nested'
+def get_fixture(file_name):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    fixture = os.path.join(current_dir, 'fixtures', file_name)
+    return fixture
+
+
+check = {
+    'flat_expected.txt': (
+        'before.json',
+        'before.yml',
+        'after.json',
+        'after.yml',
+        'nested'
+    ),
+    'nested_expected.txt': (
+        'before_nested.json',
+        'before_nested.yml',
+        'after_nested.json',
+        'after_nested.yml',
+        'nested'
+    ),
+    'plain_expected.txt': (
+        'before_nested.json',
+        'before_nested.yml',
+        'after_nested.json',
+        'after_nested.yml',
+        'plain'
+    ),
+    'empty_expected_nested.txt': (
+        'empty.json',
+        'empty.yml', 'empty.json',
+        'empty.yml',
+        'nested'
+    ),
+    'empty_expected_plain.txt': (
+        'empty.json',
+        'empty.yml',
+        'empty.json',
+        'empty.yml',
+        'plain'
     )
-    assert expected == generate_diff(
-        './tests/fixtures/before.yml',
-        './tests/fixtures/after.yml',
-        out_format='nested'
-    )
+         }
 
 
-def test_compare_empty_files():
-    assert generate_diff(
-        './tests/fixtures/empty.json',
-        './tests/fixtures/empty.json',
-        out_format='nested'
-    ) == '{}'
-    assert generate_diff(
-        './tests/fixtures/empty.yml',
-        './tests/fixtures/empty.yml',
-        out_format='nested'
-    ) == '{}'
-    assert generate_diff(
-        './tests/fixtures/empty.json',
-        './tests/fixtures/empty.json',
-        out_format='plain'
-    ) == ''
-    assert generate_diff(
-        './tests/fixtures/empty.yml',
-        './tests/fixtures/empty.yml',
-        out_format='plain'
-    ) == ''
+def test_text_format():
+    for expected_data, init_data in check.items():
+        before_json, before_yaml, after_json, after_yaml, check_format = init_data  # noqa:E501
 
+        with open(get_fixture(expected_data), 'r') as fixture:
+            expected = fixture.read()
 
-def test_complex_files():
-    with open('./tests/fixtures/nested_expected_common_diff.txt', 'r') as fixture:
-        expected = fixture.read()
-    assert expected == generate_diff(
-        './tests/fixtures/before_nested.json',
-        './tests/fixtures/after_nested.json',
-        out_format='nested'
-    )
-    assert expected == generate_diff(
-        './tests/fixtures/before_nested.yml',
-        './tests/fixtures/after_nested.yml',
-        out_format='nested'
-    )
-
-
-def test_plain_format():
-    with open('./tests/fixtures/plain_expected_common_diff.txt', 'r') as fixture:
-        expected = fixture.read()
-
-    assert expected == generate_diff(
-        './tests/fixtures/before_nested.json',
-        './tests/fixtures/after_nested.json',
-        out_format='plain'
-    )
-    assert expected == generate_diff(
-        './tests/fixtures/before_nested.yml',
-        './tests/fixtures/after_nested.yml',
-        out_format='plain'
-    )
+        assert expected == generate_diff(
+            get_fixture(before_json),
+            get_fixture(after_json),
+            out_format=check_format
+        )
+        assert expected == generate_diff(
+            get_fixture(before_json),
+            get_fixture(after_yaml),
+            out_format=check_format
+        )
+        assert expected == generate_diff(
+            get_fixture(before_yaml),
+            get_fixture(after_yaml),
+            out_format=check_format
+        )
 
 
 def test_json_format():
-    with open('./tests/fixtures/json_expected_common_diff.txt', 'r') as fixture:
-        expected = fixture.read()
+    fixture = get_fixture('json_expected.json')
+    expected = json.load(open(fixture))
+    print(expected)
 
-    assert expected == generate_diff(
-        './tests/fixtures/before_nested.json',
-        './tests/fixtures/after_nested.json',
+    check_json = generate_diff(
+        get_fixture('before_nested.json'),
+        get_fixture('after_nested.json'),
         out_format='json'
     )
-    assert expected == generate_diff(
-        './tests/fixtures/before_nested.yml',
-        './tests/fixtures/after_nested.yml',
+    check_yaml = generate_diff(
+        get_fixture('before_nested.yml'),
+        get_fixture('after_nested.yml'),
         out_format='json'
     )
+    assert expected == json.loads(check_json)
+    assert expected == json.loads(check_yaml)
+

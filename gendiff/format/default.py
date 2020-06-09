@@ -1,10 +1,56 @@
-import json
-from gendiff.format.string_editor import add_prefix, remove_postfix
+from gendiff import diff
 
 
-def generate_nested_format(common_data, tags):
-    out_string = json.dumps(common_data, indent=4, separators=('', ': ')).replace('"', '')  # noqa: E501
-    out_string = add_prefix(out_string, tags)
-    out_string = remove_postfix(out_string, postfix='_deleted')
-    out_string = remove_postfix(out_string, postfix='_added')
+def format_complex_value(complex_value, prefix, indent):
+    result = '{'
+    tab = '    '
+    for key, value in complex_value.items():
+        if isinstance(value, dict):
+            result += f'\n{indent}{prefix}{key}: ' \
+                      f'{format_complex_value(value, prefix, indent=indent + tab)}'  # noqa: E501
+        else:
+            result += f'\n{indent}{prefix}{key}: {value}'
+    indent = indent[:-len(prefix)]
+    result += '\n'
+    result += indent + '}'
+    return result
+
+
+def iterate_data(common_data, out_string, indent):
+    prefix_add = '+ '
+    prefix_remove = '- '
+    prefix_non_changed = '  '
+    tab = '    '
+    for key, (status, value) in sorted(common_data.items()):
+        if status == diff.NESTED:
+            out_string += f'\n{indent}{key}: ' \
+                          f'{iterate_data(value, out_string="{", indent = indent + tab)}'  # noqa: E501
+        elif status == diff.EQUAL:
+            out_string += f'\n{indent}{prefix_non_changed}{key}: {value}'
+        elif status == diff.CHANGED:
+            val_before, val_after = value
+            out_string += f'\n{indent}{prefix_add}{key}: {val_after}'
+            out_string += f'\n{indent}{prefix_remove}{key}: {val_before}'
+        elif status == diff.ADDED:
+            if isinstance(value, dict):
+                out_string += f'\n{indent}{prefix_add}{key}: ' \
+                              f'{format_complex_value(value, prefix=prefix_non_changed, indent=indent+tab)}'  # noqa: E501
+            else:
+                out_string += f'\n{indent}{prefix_add}{key}: {value}'
+        elif status == diff.REMOVED:
+            if isinstance(value, dict):
+                out_string += f'\n{indent}{prefix_remove}{key}: ' \
+                              f'{format_complex_value(value, prefix=prefix_non_changed, indent=indent + tab)}'  # noqa: E501
+            else:
+                out_string += f'\n{indent}{prefix_remove}{key}: {value}'
+    indent = indent[:-len(tab)]
+    if out_string != '{':
+        out_string += '\n'
+    out_string += indent + '}'
     return out_string
+
+
+def generate_nested_format(common_data):
+    out_string = '{'
+    indent = '    '
+    return iterate_data(common_data, out_string, indent)
