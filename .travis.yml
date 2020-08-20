@@ -1,6 +1,6 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=b3bf857638c20209fe485827fed03c45f5a92e1cbf25b7f1f53f4e3aa48f5909
+    - CC_TEST_REPORTER_ID=27cdcf505c863955f6c8a1a4bf3f42eed5fd102d177f2b2d9c7827f364a22b98
 language: python
 python:
   # we want to test our package on several versions of Python
